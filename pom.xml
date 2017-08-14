@@ -11,6 +11,7 @@
 		<carnotzet.version>1.2.1</carnotzet.version>
 		<source.version>1.8</source.version>
 		<target.version>1.8</target.version>
+		<jacoco.version>0.7.9</jacoco.version>
 	</properties>
 
 	<dependencies>
@@ -49,6 +50,35 @@
 	<build>
 		<plugins>
 			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>download-jococo</id>
+						<phase>
+							generate-resources
+						</phase>
+						<goals>
+							<goal>
+								copy
+							</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.jacoco</groupId>
+									<artifactId>org.jacoco.agent</artifactId>
+									<version>${jacoco.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<destFileName>jacocoagent.jar</destFileName>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/classes/jacoco/</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>${source.version}</source>
@@ -57,7 +87,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
 
 
 </project>
