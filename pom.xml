@@ -69,6 +69,7 @@
 									<artifactId>org.jacoco.agent</artifactId>
 									<version>${jacoco.version}</version>
 									<type>jar</type>
+									<classifier>runtime</classifier>
 									<overWrite>true</overWrite>
 									<destFileName>jacocoagent.jar</destFileName>
 								</artifactItem>
