@@ -31,7 +31,7 @@
 
 	<scm>
 		<connection>scm:git:git://github.com/ishestakov/carnotzet-jacoco-extension.git</connection>
-		<developerConnection>scm:git:ssh://github.com/ishestakov/carnotzet-jacoco-extension.git</developerConnection>
+		<developerConnection>scm:git:git://github.com/ishestakov/carnotzet-jacoco-extension.git</developerConnection>
 		<url>https://github.com/ishestakov/carnotzet-jacoco-extension/tree/master</url>
 	  <tag>jacoco-extension-0.0.1</tag>
   </scm>
