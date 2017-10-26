@@ -34,6 +34,7 @@ public class JaCoCoExtension implements CarnotzetExtension {
 
 	private final Set<String> requiredModules;
 	private final Path executionReportsPath;
+	private final String configuration;
 
 	public Set<String> getRequiredModules() {
 		return Sets.newHashSet(requiredModules);
@@ -43,13 +44,15 @@ public class JaCoCoExtension implements CarnotzetExtension {
 		return executionReportsPath;
 	}
 
-	public JaCoCoExtension(Set<String> moduleNames, String executionReportsPath) {
+	public JaCoCoExtension(Set<String> moduleNames, String executionReportsPath, String configuration) {
 		this.executionReportsPath = Optional.ofNullable(executionReportsPath).map(Paths::get).orElse(null);
 		this.requiredModules = new HashSet<>(moduleNames);
+		this.configuration = configuration;
 	}
 
-	public JaCoCoExtension(Set<String> moduleNames) {
+	public JaCoCoExtension(Set<String> moduleNames, String configuration) {
 		this.requiredModules = new HashSet<>(moduleNames);
+		this.configuration = configuration;
 		this.executionReportsPath = null;
 	}
 
@@ -110,7 +113,8 @@ public class JaCoCoExtension implements CarnotzetExtension {
 	}
 
 	private void prepareResources(Carnotzet carnotzet) {
-		extractFromJar("/jacoco/java.env", carnotzet.getResourcesFolder().resolve("jacoco/java.env"));
+		JaCoCoEnvFileBuilder.build(carnotzet.getResourcesFolder().resolve("jacoco/java.env"), this.configuration);
+//		extractFromJar("/jacoco/java.env", carnotzet.getResourcesFolder().resolve("jacoco/java.env"));
 		extractFromJar("/jacoco/jacocoagent.jar", carnotzet.getResourcesFolder().resolve("jacoco/jacocoagent.jar"));
 	}
 

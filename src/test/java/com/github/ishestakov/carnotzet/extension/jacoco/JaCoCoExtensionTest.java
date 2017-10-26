@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -55,7 +54,7 @@ public class JaCoCoExtensionTest {
 	@Test
 	public void testEmptyModules() {
 		Set<String> singleModule = Collections.singleton(APPLICABLE_MODULE);
-		JaCoCoExtension extension = new JaCoCoExtension(singleModule);
+		JaCoCoExtension extension = new JaCoCoExtension(singleModule, "");
 		Carnotzet carnotzet = mock(Carnotzet.class);
 		when(carnotzet.getResourcesFolder()).thenReturn(temporaryFolder.getRoot().toPath());
 		when(carnotzet.getModules()).thenReturn(Lists.newArrayList());
@@ -67,7 +66,7 @@ public class JaCoCoExtensionTest {
 	@Test
 	public void testSingleModuleNotAffected() {
 		Set<String> singleModule = Collections.singleton(APPLICABLE_MODULE);
-		JaCoCoExtension extension = new JaCoCoExtension(singleModule);
+		JaCoCoExtension extension = new JaCoCoExtension(singleModule, "");
 		Carnotzet carnotzet = mock(Carnotzet.class);
 		CarnotzetModule module = CarnotzetModule.builder().name(NON_APPLICABLE_MODULE).build();
 
@@ -90,7 +89,7 @@ public class JaCoCoExtensionTest {
 	@Test
 	public void testSingleModuleAffected() {
 		Set<String> singleModule = Collections.singleton(APPLICABLE_MODULE);
-		JaCoCoExtension extension = new JaCoCoExtension(singleModule);
+		JaCoCoExtension extension = new JaCoCoExtension(singleModule, "");
 		Carnotzet carnotzet = mock(Carnotzet.class);
 		CarnotzetModule module = CarnotzetModule.builder().name(APPLICABLE_MODULE).build();
 
@@ -108,7 +107,8 @@ public class JaCoCoExtensionTest {
 	public void testSingleModuleAffectedDifferentReportingPath() throws IOException {
 		Set<String> singleModule = Collections.singleton(APPLICABLE_MODULE);
 		File anotherFilePath = temporaryFolder.newFolder("reports");
-		JaCoCoExtension extension = new JaCoCoExtension(singleModule, anotherFilePath.toPath().toAbsolutePath().toString());
+		JaCoCoExtension extension = new JaCoCoExtension(singleModule, anotherFilePath.toPath().toAbsolutePath().toString(),
+				"");
 		Carnotzet carnotzet = mock(Carnotzet.class);
 		CarnotzetModule module = CarnotzetModule.builder().name(APPLICABLE_MODULE).build();
 
@@ -125,7 +125,7 @@ public class JaCoCoExtensionTest {
 	@Test
 	public void testReportFileAlreadyExists() throws IOException {
 		Set<String> singleModule = Collections.singleton(APPLICABLE_MODULE);
-		JaCoCoExtension extension = new JaCoCoExtension(singleModule);
+		JaCoCoExtension extension = new JaCoCoExtension(singleModule, "");
 		Carnotzet carnotzet = mock(Carnotzet.class);
 		CarnotzetModule module = CarnotzetModule.builder().name(APPLICABLE_MODULE).build();
 		File reportFile = temporaryFolder.newFile(getModuleExecutionReportFileName(module));
@@ -143,7 +143,7 @@ public class JaCoCoExtensionTest {
 	@Test
 	public void severalModulesTest() {
 		Set<String> severalModules = Sets.newHashSet(APPLICABLE_MODULE, ANOTHER_APPLICABLE_MODULE, YET_ANOTHER_APPLICABLE_MODULE);
-		JaCoCoExtension extension = new JaCoCoExtension(severalModules);
+		JaCoCoExtension extension = new JaCoCoExtension(severalModules, "");
 		Carnotzet carnotzet = mock(Carnotzet.class);
 		CarnotzetModule module1 = CarnotzetModule.builder().name(APPLICABLE_MODULE).build();
 		CarnotzetModule module2 = CarnotzetModule.builder().name(ANOTHER_APPLICABLE_MODULE).build();
@@ -176,8 +176,6 @@ public class JaCoCoExtensionTest {
 	public void testAppliedModule(CarnotzetModule originalModule, CarnotzetModule testModule) {
 		testAppliedModule(originalModule, testModule, resolveResourceFilePath(getModuleExecutionReportFileName(originalModule)));
 	}
-
-
 
 	private String getModuleExecutionReportFileName(CarnotzetModule module) {
 		return module.getName() + ".exec";
