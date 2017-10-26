@@ -10,23 +10,23 @@ import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.Con
 import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.INCLNOLOCATIONCLASSES;
 import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.INCLUDES;
 import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.JMX;
-import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.JMX_AUTH;
-import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.JMX_PORT;
-import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.JMX_SSL;
 import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.OUTPUT;
 import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.PORT;
 import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.SESSIONID;
+import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JavaKeys.JMX_AUTH;
+import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JavaKeys.JMX_PORT;
+import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JavaKeys.JMX_SSL;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class ConfigurationParser {
-	private static final Collection<ConfigurationPropParser<?>> props = new CopyOnWriteArraySet<>();
 
-	public enum JacocoPropertyKey {
+	public enum JacocoPropertyKey implements PropertyKey {
 
 		APPEND("append"),
 
@@ -52,13 +52,7 @@ public class ConfigurationParser {
 
 		CLASSDUMPDIR("classdumpdir"),
 
-		JMX("jmx"),
-
-		JMX_AUTH("jmxAuth"),
-
-		JMX_SSL("jmxSsl"),
-
-		JMX_PORT("jmxPort");
+		JMX("jmx");
 
 		private final String key;
 
@@ -71,46 +65,78 @@ public class ConfigurationParser {
 		}
 	}
 
+	enum JavaKeys implements PropertyKey {
+		JMX_AUTH("-Dcom.sun.management.jmxremote.authenticate"),
+
+		JMX_SSL("-Dcom.sun.management.jmxremote.ssl"),
+
+		JMX_PORT("-Dcom.sun.management.jmxremote.port");
+
+		private final String key;
+
+		JavaKeys(String key) {
+			this.key = key;
+		}
+
+		public String getKey() {
+			return key;
+		}
+	}
+
+	private static final Collection<ConfigurationPropParser<?>> jacocoProps = new ArrayList<>(JacocoPropertyKey.values().length);
+	private static final Collection<ConfigurationPropParser<?>> javaProps = new ArrayList<>(JavaKeys.values().length);
+
 	static {
-		registerProp(BooleanValuePropertyParser.forPropertyDefaultTrue(APPEND.getKey()));
-		registerProp(StringValuePropertyParser.forPropertyWithDefault(OUTPUT.getKey(), "file"));
-		registerProp(BooleanValuePropertyParser.forPropertyDefaultTrue(DUMPONEXIT.getKey()));
-		registerProp(StringValuePropertyParser.forPropertyWithNullDefault(INCLUDES.getKey()));
-		registerProp(StringValuePropertyParser.forPropertyWithNullDefault(EXCLUDES.getKey()));
-		registerProp(StringValuePropertyParser.forPropertyWithNullDefault(EXCLCLASSLOADER.getKey()));
-		registerProp(StringValuePropertyParser.forPropertyWithNullDefault(INCLBOOTSTRAPCLASSES.getKey()));
-		registerProp(StringValuePropertyParser.forPropertyWithNullDefault(INCLNOLOCATIONCLASSES.getKey()));
-		registerProp(StringValuePropertyParser.forPropertyWithNullDefault(SESSIONID.getKey()));
-		registerProp(StringValuePropertyParser.forPropertyWithNullDefault(ADDRESS.getKey()));
-		registerProp(StringValuePropertyParser.forPropertyWithNullDefault(PORT.getKey()));
-		registerProp(StringValuePropertyParser.forPropertyWithNullDefault(CLASSDUMPDIR.getKey()));
-		registerProp(BooleanValuePropertyParser.forPropertyDefaultTrue(JMX.getKey()));
-		registerProp(BooleanValuePropertyParser.forPropertyDefaultFalse(JMX_AUTH.getKey()));
-		registerProp(BooleanValuePropertyParser.forPropertyDefaultFalse(JMX_SSL.getKey()));
-		registerProp(IntegerValuePropertyParser.forPropertyDefaultValue(JMX_PORT.getKey(), 8888));
+		registerJacocoParser(BooleanValuePropertyParser.forPropertyDefaultTrue(APPEND));
+		registerJacocoParser(StringValuePropertyParser.forPropertyWithDefault(OUTPUT, "file"));
+		registerJacocoParser(BooleanValuePropertyParser.forPropertyDefaultTrue(DUMPONEXIT));
+		registerJacocoParser(StringValuePropertyParser.forPropertyWithNullDefault(INCLUDES));
+		registerJacocoParser(StringValuePropertyParser.forPropertyWithNullDefault(EXCLUDES));
+		registerJacocoParser(StringValuePropertyParser.forPropertyWithNullDefault(EXCLCLASSLOADER));
+		registerJacocoParser(StringValuePropertyParser.forPropertyWithNullDefault(INCLBOOTSTRAPCLASSES));
+		registerJacocoParser(StringValuePropertyParser.forPropertyWithNullDefault(INCLNOLOCATIONCLASSES));
+		registerJacocoParser(StringValuePropertyParser.forPropertyWithNullDefault(SESSIONID));
+		registerJacocoParser(StringValuePropertyParser.forPropertyWithNullDefault(ADDRESS));
+		registerJacocoParser(StringValuePropertyParser.forPropertyWithNullDefault(PORT));
+		registerJacocoParser(StringValuePropertyParser.forPropertyWithNullDefault(CLASSDUMPDIR));
+		registerJacocoParser(BooleanValuePropertyParser.forPropertyDefaultTrue(JMX));
+
+		registerJavaParser(BooleanValuePropertyParser.forPropertyDefaultFalse(JMX_AUTH));
+		registerJavaParser(BooleanValuePropertyParser.forPropertyDefaultFalse(JMX_SSL));
+		registerJavaParser(IntegerValuePropertyParser.forPropertyDefaultValue(JMX_PORT, 8888));
 	}
 
 	private ConfigurationParser() {
 		super();
 	}
 
-	private static void registerProp(ConfigurationPropParser<?> prop) {
-		getParsers().add(prop);
+	private static void registerJacocoParser(ConfigurationPropParser<?> prop) {
+		jacocoProps.add(prop);
 	}
 
-	private static Collection<ConfigurationPropParser<?>> getParsers() {
-		return props;
-	}
-
-	private static Collection<ConfigurationProp<?>> parseProperties(Properties properties) {
-		return getParsers().stream().map(parser -> parser.parse(properties)).collect(Collectors.toSet());
+	private static void registerJavaParser(ConfigurationPropParser<?> prop) {
+		javaProps.add(prop);
 	}
 
 	public static String parse(Properties properties) {
-		return parseProperties(properties).stream()
+		return parseJacocoProperties(properties) + " " + parseJavaProperties(properties);
+	}
+
+	private static String parseJacocoProperties(Properties properties) {
+		return applyParsers(jacocoProps, properties, Collectors.joining(","));
+	}
+
+	private static String parseJavaProperties(Properties properties) {
+		return applyParsers(javaProps, properties, Collectors.joining(" "));
+	}
+
+	private static String applyParsers(Collection<ConfigurationPropParser<?>> parsers, Properties properties,
+			Collector<CharSequence, ?, String> joining) {
+		return parsers.stream()
+				.map(parser -> parser.parse(properties))
 				.filter(Objects::nonNull)
 				.map(Object::toString)
 				.filter(item -> !item.isEmpty())
-				.collect(Collectors.joining(","));
+				.collect(joining);
 	}
 }

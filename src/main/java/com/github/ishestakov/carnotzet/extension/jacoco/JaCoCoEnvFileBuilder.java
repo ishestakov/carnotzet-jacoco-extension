@@ -8,7 +8,7 @@ import org.apache.commons.io.FileUtils;
 
 final class JaCoCoEnvFileBuilder {
 
-	public static final String STANDARD_PART = "_JAVA_OPTIONS=-javaagent:/jacoco/jacocoagent.jar=destfile=/jacoco/report,";
+	private static final String STANDARD_PART = "_JAVA_OPTIONS=-javaagent:/jacoco/jacocoagent.jar=destfile=/jacoco/report,";
 
 	private JaCoCoEnvFileBuilder() {
 		super();

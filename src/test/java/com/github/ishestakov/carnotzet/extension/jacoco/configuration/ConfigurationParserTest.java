@@ -10,9 +10,9 @@ import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.Con
 import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.INCLNOLOCATIONCLASSES;
 import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.INCLUDES;
 import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.JMX;
-import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.JMX_AUTH;
-import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.JMX_PORT;
-import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.JMX_SSL;
+import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JavaKeys.JMX_AUTH;
+import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JavaKeys.JMX_PORT;
+import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JavaKeys.JMX_SSL;
 import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.PORT;
 import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.SESSIONID;
 import static com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser.JacocoPropertyKey.OUTPUT;

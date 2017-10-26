@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.ishestakov.carnotzet.extension.jacoco.configuration.ConfigurationParser;
 import com.github.swissquote.carnotzet.core.Carnotzet;
 import com.github.swissquote.carnotzet.core.CarnotzetExtension;
 import com.github.swissquote.carnotzet.core.CarnotzetModule;
@@ -31,6 +33,7 @@ public class JaCoCoExtension implements CarnotzetExtension {
 	public static final String CONTAINER_AGENT_PATH = "/jacoco/jacocoagent.jar";
 	public static final String SYSTEM_JACOCO_JAVA_OPTIONS_FILE = "jacoco/java.env";
 	public static final String CONTAINER_EXECUTION_FILE_PATH = "/jacoco/report";
+	public static final String CONTAINER_JACOCO_AGENT_PATH = "/jacoco/jacocoagent.jar";
 
 	private final Set<String> requiredModules;
 	private final Path executionReportsPath;
@@ -50,9 +53,9 @@ public class JaCoCoExtension implements CarnotzetExtension {
 		this.configuration = configuration;
 	}
 
-	public JaCoCoExtension(Set<String> moduleNames, String configuration) {
+	public JaCoCoExtension(Set<String> moduleNames, String executionReportsPath) {
 		this.requiredModules = new HashSet<>(moduleNames);
-		this.configuration = configuration;
+		this.configuration = ConfigurationParser.parse(new Properties());
 		this.executionReportsPath = null;
 	}
 
@@ -114,13 +117,12 @@ public class JaCoCoExtension implements CarnotzetExtension {
 
 	private void prepareResources(Carnotzet carnotzet) {
 		JaCoCoEnvFileBuilder.build(carnotzet.getResourcesFolder().resolve("jacoco/java.env"), this.configuration);
-//		extractFromJar("/jacoco/java.env", carnotzet.getResourcesFolder().resolve("jacoco/java.env"));
-		extractFromJar("/jacoco/jacocoagent.jar", carnotzet.getResourcesFolder().resolve("jacoco/jacocoagent.jar"));
+		extractJacocoAgent(carnotzet.getResourcesFolder().resolve("jacoco/jacocoagent.jar"));
 	}
 
-	private static void extractFromJar(String filePath, Path destination) {
+	private static void extractJacocoAgent(Path destination) {
 		try {
-			URL inputUrl = JaCoCoExtension.class.getResource(filePath);
+			URL inputUrl = JaCoCoExtension.class.getResource(CONTAINER_JACOCO_AGENT_PATH);
 			FileUtils.copyURLToFile(inputUrl, destination.toFile());
 		}
 		catch (IOException e) {

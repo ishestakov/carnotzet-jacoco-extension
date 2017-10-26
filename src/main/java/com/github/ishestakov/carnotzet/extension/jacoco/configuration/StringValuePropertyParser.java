@@ -15,11 +15,11 @@ class StringValuePropertyParser extends ConfigurationPropParser<String> {
 		return Function.identity();
 	}
 
-	static StringValuePropertyParser forPropertyWithDefault(String propertyName, String defaultValue) {
-		return new StringValuePropertyParser(propertyName, defaultValue);
+	static StringValuePropertyParser forPropertyWithDefault(PropertyKey propertyName, String defaultValue) {
+		return new StringValuePropertyParser(propertyName.getKey(), defaultValue);
 	}
 
-	static StringValuePropertyParser forPropertyWithNullDefault(String propertyName) {
-		return new StringValuePropertyParser(propertyName, null);
+	static StringValuePropertyParser forPropertyWithNullDefault(PropertyKey propertyName) {
+		return forPropertyWithDefault(propertyName, null);
 	}
 }
