@@ -54,7 +54,7 @@ public class JaCoCoExtensionTest {
 	@Test
 	public void testEmptyModules() {
 		Set<String> singleModule = Collections.singleton(APPLICABLE_MODULE);
-		JaCoCoExtension extension = new JaCoCoExtension(singleModule, "");
+		JaCoCoExtension extension = new JaCoCoExtension(singleModule);
 		Carnotzet carnotzet = mock(Carnotzet.class);
 		when(carnotzet.getResourcesFolder()).thenReturn(temporaryFolder.getRoot().toPath());
 		when(carnotzet.getModules()).thenReturn(Lists.newArrayList());
@@ -66,7 +66,7 @@ public class JaCoCoExtensionTest {
 	@Test
 	public void testSingleModuleNotAffected() {
 		Set<String> singleModule = Collections.singleton(APPLICABLE_MODULE);
-		JaCoCoExtension extension = new JaCoCoExtension(singleModule, "");
+		JaCoCoExtension extension = new JaCoCoExtension(singleModule);
 		Carnotzet carnotzet = mock(Carnotzet.class);
 		CarnotzetModule module = CarnotzetModule.builder().name(NON_APPLICABLE_MODULE).build();
 
@@ -89,7 +89,7 @@ public class JaCoCoExtensionTest {
 	@Test
 	public void testSingleModuleAffected() {
 		Set<String> singleModule = Collections.singleton(APPLICABLE_MODULE);
-		JaCoCoExtension extension = new JaCoCoExtension(singleModule, "");
+		JaCoCoExtension extension = new JaCoCoExtension(singleModule);
 		Carnotzet carnotzet = mock(Carnotzet.class);
 		CarnotzetModule module = CarnotzetModule.builder().name(APPLICABLE_MODULE).build();
 
@@ -125,7 +125,7 @@ public class JaCoCoExtensionTest {
 	@Test
 	public void testReportFileAlreadyExists() throws IOException {
 		Set<String> singleModule = Collections.singleton(APPLICABLE_MODULE);
-		JaCoCoExtension extension = new JaCoCoExtension(singleModule, "");
+		JaCoCoExtension extension = new JaCoCoExtension(singleModule);
 		Carnotzet carnotzet = mock(Carnotzet.class);
 		CarnotzetModule module = CarnotzetModule.builder().name(APPLICABLE_MODULE).build();
 		File reportFile = temporaryFolder.newFile(getModuleExecutionReportFileName(module));
@@ -143,7 +143,7 @@ public class JaCoCoExtensionTest {
 	@Test
 	public void severalModulesTest() {
 		Set<String> severalModules = Sets.newHashSet(APPLICABLE_MODULE, ANOTHER_APPLICABLE_MODULE, YET_ANOTHER_APPLICABLE_MODULE);
-		JaCoCoExtension extension = new JaCoCoExtension(severalModules, "");
+		JaCoCoExtension extension = new JaCoCoExtension(severalModules);
 		Carnotzet carnotzet = mock(Carnotzet.class);
 		CarnotzetModule module1 = CarnotzetModule.builder().name(APPLICABLE_MODULE).build();
 		CarnotzetModule module2 = CarnotzetModule.builder().name(ANOTHER_APPLICABLE_MODULE).build();

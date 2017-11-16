@@ -1,7 +1,5 @@
 package com.github.ishestakov.carnotzet.extension.jacoco.configuration;
 
-import java.util.Optional;
-import java.util.Properties;
 import java.util.function.Function;
 
 class BooleanValuePropertyParser extends ConfigurationPropParser<Boolean> {
