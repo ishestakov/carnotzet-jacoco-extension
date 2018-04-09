@@ -54,9 +54,11 @@ public class JaCoCoExtension implements CarnotzetExtension {
 	}
 
 	public JaCoCoExtension(Set<String> moduleNames, String executionReportsPath) {
-		this.requiredModules = new HashSet<>(moduleNames);
-		this.configuration = ConfigurationParser.parse(new Properties());
-		this.executionReportsPath = null;
+		this(moduleNames, executionReportsPath, ConfigurationParser.parse(new Properties()));
+	}
+
+	public JaCoCoExtension(Set<String> moduleNames) {
+		this(moduleNames, null);
 	}
 
 	@Override
