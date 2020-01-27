@@ -40,7 +40,7 @@
 		<carnotzet.version>1.2.1</carnotzet.version>
 		<source.version>1.8</source.version>
 		<target.version>1.8</target.version>
-		<jacoco.version>0.7.9</jacoco.version>
+		<jacoco.version>0.8.5</jacoco.version>
 	</properties>
 
 	<dependencies>
