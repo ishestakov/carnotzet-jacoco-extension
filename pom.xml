@@ -4,7 +4,7 @@
 
 	<groupId>com.github.ishestakov.carnotzet</groupId>
 	<artifactId>jacoco-extension</artifactId>
-	<version>0.0.7</version>
+	<version>0.0.8-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>${project.groupId}:${project.artifactId}</name>
@@ -33,7 +33,7 @@
 		<connection>scm:git:git://github.com/ishestakov/carnotzet-jacoco-extension.git</connection>
 		<developerConnection>scm:git:https://github.com/ishestakov/carnotzet-jacoco-extension.git</developerConnection>
 		<url>https://github.com/ishestakov/carnotzet-jacoco-extension/tree/master</url>
-	  <tag>jacoco-extension-0.0.7</tag>
+	  <tag>jacoco-extension-${project.version}</tag>
   </scm>
 
 	<properties>
