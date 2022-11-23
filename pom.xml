@@ -37,7 +37,7 @@
   </scm>
 
 	<properties>
-		<carnotzet.version>1.8.5</carnotzet.version>
+		<carnotzet.version>1.8.8</carnotzet.version>
 		<source.version>1.8</source.version>
 		<target.version>1.8</target.version>
 		<jacoco.version>0.8.7</jacoco.version>
